@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas { border: 1px solid #333333; }
+    </style>
+</head>
+
+<body>
+    <canvas id="stage"></canvas>
+    <script src="js/tetris.js"></script>
+    <script src="js/undoWrapper.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/ai.js"></script>
+    <script>
+        const game = undoWrapper(new Tetris())
+        const renderer = new Renderer('stage', game)
+        
+        let actions = []
+        let timer = 0
+        
+        function gameloop () {
+            timer++
+            if (timer % 1 == 0) {
+                if (actions.length <= 0) {
+                    actions = AI(game)
+                } else {
+                    let a = actions.pop()
+                    if (a === 'R') game.moveRight()
+                    if (a === 'L') game.moveLeft()
+                    if (a === 'D') game.moveDownToEnd()
+                    if (a === 'T') game.turnRight()
+                }
+            }
+            
+            renderer.render()
+            requestAnimationFrame(gameloop)
+        }
+        gameloop()
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 40) game.moveDownToEnd()
+            if (e.keyCode === 37) game.moveLeft()
+            if (e.keyCode === 39) game.moveRight()
+            if (e.keyCode === 38) game.turnRight()
+        })
+    </script>
+</body>
+
+</html>
