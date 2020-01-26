@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas { border: 1px solid #ccc; }
+    </style>
+</head>
+
+<body>
+    <canvas id="stage"></canvas>
+    <script src="js/tetris.js"></script>
+    <script src="js/renderer.js"></script>
+    <script>
+        const game = new Tetris()
+        const renderer = new Renderer('stage', game)
+
+        let timer = 0
+        function gameloop () {
+            timer++
+            if (timer % 10 === 0) game.moveDown()
+            renderer.render()
+            requestAnimationFrame(gameloop)
+        }
+        gameloop()
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 40) game.moveDownToEnd()
+            if (e.keyCode === 37) game.moveLeft()
+            if (e.keyCode === 39) game.moveRight()
+            if (e.keyCode === 38) game.turnRight()
+        })
+    </script>
+</body>
+
+</html>
