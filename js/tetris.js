@@ -24,6 +24,18 @@ class Tetris {
         this.loadBlocks()
     }
 
+    getGrid () {
+        let grid = []
+        for (let y = 0; y < this.height; y++) {
+            grid[y] = []
+            for (let x = 0; x < this.width; x++) {
+                grid[y][x] = ' '
+            }
+        }
+        this.blocks.filter(b => b.state === 'fixed').forEach(b => grid[b.y][b.x] = '*')
+        return grid
+    }
+
     loadBlocks() {
 
         if (this.status === 'gameover') return false
